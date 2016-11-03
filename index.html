@@ -10,21 +10,25 @@
         <link rel="stylesheet" href="css/normalize.min.css">
         <link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-        <script src="js/vendor/world-map.js"></script>
+        <!-- <script src="js/vendor/require.js"></script> -->
+        <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script>
+        <!-- <script src="js/server.js"></script>
+        <script src="node_modules/request/request.js"></script> -->
     </head>
     <body>
-
         <div class="main-container">
+            <div class="avatars">
+                
+            </div>
             <div id="worldMap">
                 
             </div>
         </div> <!-- #main-container -->
+        <!-- <script src="js/bundle.js"></script> -->
         <script src="js/main.js"></script>
     </body>
 </html>

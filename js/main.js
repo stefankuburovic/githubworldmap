@@ -23,7 +23,7 @@ setInterval(function(){
 
 	function githubCountries(){
 		 $.ajax({
-		 	url: "https://api.github.com/events" ,
+		 	url: "https://api.github.com/events",
 		 	success: function(result){
 		 		if(result != stashResult) {
 			 		$.each(result, function(index, value){

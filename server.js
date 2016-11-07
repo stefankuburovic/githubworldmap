@@ -4,7 +4,6 @@ http = require('http').Server(app),
 io = require('socket.io')(http),
 path = require('path');
 
-
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
@@ -17,24 +16,24 @@ var allClients = [];
 
 // When a socket connection is created
 io.on('connection', function (socket) {
-  allClients.push(socket);
+	allClients.push(socket);
 
-  socket.on('disconnect', function() {
-     console.log('Got disconnect!');
-     var i = allClients.indexOf(socket);
-     allClients.splice(i, 1);
-  });
+	socket.on('disconnect', function() {
+	 console.log('Got disconnect!');
+	 var i = allClients.indexOf(socket);
+	 allClients.splice(i, 1);
+	});
 
-  socket.on('error', function(){
-    console.log('Got errored!');
-  })
-socket.on('github', function (data) {
-    if(typeof data != "undefined") {
-        $.each(data, function(index, value){
-            githubCountries(value);
-        });
-    }
-});
+	socket.on('error', function(){
+	console.log('Got errored!');
+	})
+	socket.on('github', function (data) {
+		if(typeof data != "undefined") {
+		    $.each(data, function(index, value){
+		        githubCountries(value);
+		    });
+		}
+	});
 });
 
 function fetchDataFromGithub(){
@@ -50,7 +49,10 @@ function fetchDataFromGithub(){
 	  var stripedData = stripData(data);  // Keep only useful keys
 	  allClients.forEach(function(socket){
 	    if(socket != null && socket.connected == true){
-	        socket.volatile.json.emit('github', {data: stripedData});
+	    	console.log(io.sockets.clients('room'));
+	    	// stripedData.push({'people': 1});
+			socket.volatile.json.emit('github', {data: stripedData});
+            // socket.volatile.json.emit('connected_users', {connected_users: allClients});
 	    }
 	  });
 

@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style type="text/css">
             /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
-
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans');
             .main-container, #worldMap {
                 position: relative;
                 display: block;
@@ -58,6 +58,12 @@
                 transition: top 0.3s;
                 top: 150px;
             }
+            .watching {
+                font-family: 'Open Sans', sans-serif;
+                right: 0;
+                position: absolute;
+                color: #aaa;
+            }
         </style>
     <!--     <link rel="stylesheet" href="./css/normalize.min.css">
         <link rel="stylesheet" href="./css/main.css"> -->
@@ -72,6 +78,7 @@
     </head>
     <body>
         <div class="main-container">
+        <span class='watching'><span class="number"></span> people watching</span>
             <div class="avatars">
                 
             </div>
@@ -113,7 +120,7 @@
                     });
                 }
             });
-
+           
             function githubCountries(data){
                 $.each(data, function(index, value){
                     $.ajax({

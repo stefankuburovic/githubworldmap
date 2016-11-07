@@ -6,18 +6,69 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style type="text/css">
+            /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
 
-        <link rel="stylesheet" href="css/normalize.min.css">
-        <link rel="stylesheet" href="css/main.css">
+            .main-container, #worldMap {
+                position: relative;
+                display: block;
+                width: 1240px;
+                height: 800px;
+                margin: 50px auto;
+            }
+            .avatars {
+                overflow: hidden;
+                position: absolute;
+                z-index: 100;
+                display: block;
+                bottom: 0;
+                left: 0;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                padding: 10px;
+            }
+            .avatars img {
+                max-width: 40px;
+                display: inline-block;
+                height: 30px;
+                margin-left: 11px;
+                overflow: hidden;
+                border-radius: 50%;
+                -moz-transition: all 0.3s;
+                -webkit-transition: all 0.3s;
+                transition: all 0.3s;
+            }
+            .avatars img:hover {
+              -moz-transform: scale(1.5);
+              -webkit-transform: scale(1.5);
+              transform: scale(1.5);
+            }
+            .avatars a img {
+                position: relative;
+                -moz-transition: top 0.3s;
+                -webkit-transition: top 0.3s;
+                transition: top 0.3s;
+                top: 0;
+            }
+            .avatars a img.full-opacity {
+                opacity: 1;
+                -moz-transition: top 0.3s;
+                -webkit-transition: top 0.3s;
+                transition: top 0.3s;
+                top: 150px;
+            }
+        </style>
+    <!--     <link rel="stylesheet" href="./css/normalize.min.css">
+        <link rel="stylesheet" href="./css/main.css"> -->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-        <!-- <script src="js/vendor/require.js"></script> -->
-        <script src="node_modules/datamaps/dist/datamaps.world.min.js"></script>
-        <!-- <script src="js/server.js"></script>
-        <script src="node_modules/request/request.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="http://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
         <div class="main-container">
@@ -27,8 +78,100 @@
             <div id="worldMap">
                 
             </div>
-        </div> <!-- #main-container -->
+        </div> 
+        <!-- #main-container -->
         <!-- <script src="js/bundle.js"></script> -->
-        <script src="js/main.js"></script>
+        <script src="/server.js"></script>
+        <script type="text/javascript">
+            var githubMap = new Datamap({
+            element: document.getElementById("worldMap"),
+            projection: 'mercator',
+            fills: {
+            defaultFill: "#ABDDA4"
+            }
+            }),
+            colors = d3.scale.category10(),
+            countries = Datamap.prototype.worldTopo.objects.world.geometries;
+            var socket = io();
+
+            $('.avatars a').hover(function(){
+                var countryData = $(this).attr('data-country');
+                console.log(countryData);
+                $.each(returnCountries(), function(index, country){
+                    if(countryData.includes(country.name)) {
+                        githubMap.updateChoropleth({
+                          [country]: '#000'
+                        });
+                    }
+                });
+            });
+
+            socket.on('github', function (data) {
+                if(typeof data != "undefined") {
+                    $.each(data, function(index, value){
+                        githubCountries(value);
+                    });
+                }
+            });
+
+            function githubCountries(data){
+                $.each(data, function(index, value){
+                    $.ajax({
+                        url: value.user_url + "?access_token=d5ff040dc8b844863a9256b51b4ef8a53a7bfcd3",
+                        crossDomain: true,
+                        success: function(result) {
+                                if(result.location != null) {
+                                    $.each(returnCountries(), function(index, country){
+                                        if(result.location.includes(country.name)) {
+                                            console.log(result.location);
+                                            avatars(result, value);
+                                            var iso = country.id;
+                                            if (value.type == 'PushEvent'){
+                                                githubMap.updateChoropleth({
+                                                  [iso]: '#17becf'
+                                                });
+                                            } else if (value.type == 'IssueCommentEvent'){
+                                                githubMap.updateChoropleth({
+                                                  [iso]: '#e25758'
+                                                });
+                                            } else if (value.type == 'PullRequestEvent'){
+                                                githubMap.updateChoropleth({
+                                                  [iso]: '#1f77b4'
+                                                });
+                                            } else if (value.type == 'IssuesEvent'){
+                                                githubMap.updateChoropleth({
+                                                  [iso]: '#d62728'
+                                                });
+                                            }
+                                        }
+                                    }); 
+                                }                     
+                            }
+                    });
+                });
+            }
+            function returnCountries(countires) {
+                var countriesRepacked = [];
+                $.each(countries, function(index, value){
+                    countriesRepacked.push({id: value.id, name: value.properties.name});
+                });
+                return countriesRepacked;
+            }
+            function avatars(result, value) {
+                if($('.avatars img').length >= 29) {
+                    $('.avatars a').remove();
+                    appendAvatars(result, value);
+                } else {
+                    appendAvatars(result, value);
+                }
+            }
+            function appendAvatars(result, value, country) {
+                $('.avatars').append('<a href="' + value.url + '" target="_blank" data-country="' + result.location + '"><img src="' + result.avatar_url + '" title="' + result.html_url + ' [' + value.type + ']" class="full-opacity"/></a>');
+                if(value.type != "PushEvent") 
+                    setTimeout(function(){$('.avatars a img').removeClass('full-opacity')}, 1000);
+
+            }
+        </script>
+        <!-- <script src="/js/main.js"></script> -->
     </body>
 </html>

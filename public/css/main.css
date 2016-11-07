@@ -402,3 +402,12 @@ nav a:hover {
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
 }
+.avatars a {
+    opacity: 0.5;
+}
+.avatars a.hide {
+    display: none;
+}
+.avatars a.full-opacity {
+    opacity: 1;
+}

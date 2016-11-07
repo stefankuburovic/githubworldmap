@@ -1,0 +1,26 @@
+{
+  "name": "worldmap",
+  "version": "1.0.0",
+  "description": "Github WorldMap",
+  "main": "index.js",
+  "dependencies": {
+    "datamaps": "^0.5.8",
+    "express": "^4.10.2",
+    "requirejs": "^2.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefankuburovic/githubworldmap.git"
+  },
+  "keywords": [],
+  "author": "Stefan Kuburovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefankuburovic/githubworldmap/issues"
+  },
+  "homepage": "https://github.com/stefankuburovic/githubworldmap#readme"
+}

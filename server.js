@@ -39,7 +39,7 @@ socket.on('github', function (data) {
 
 function fetchDataFromGithub(){
   var options = {
-    url: "https://api.github.com/events?access_token=d5ff040dc8b844863a9256b51b4ef8a53a7bfcd3",
+    url: "https://api.github.com/events?access_token=a8f0e48ea5f481c52739bc8a86a463a52299a216",
     headers: {
       'User-Agent': 'Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36'
     }

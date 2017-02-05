@@ -28,13 +28,14 @@ io.on('connection', function (socket) {
   socket.on('error', function(){
     console.log('Got errored!');
   })
-socket.on('github', function (data) {
-    if(typeof data != "undefined") {
-        $.each(data, function(index, value){
-            githubCountries(value);
-        });
-    }
-});
+
+  socket.on('github', function (data) {
+      if(typeof data != "undefined") {
+          $.each(data, function(index, value){
+              githubCountries(value);
+          });
+      }
+  });
 });
 
 function fetchDataFromGithub(){
@@ -50,7 +51,8 @@ function fetchDataFromGithub(){
 	  var stripedData = stripData(data);  // Keep only useful keys
 	  allClients.forEach(function(socket){
 	    if(socket != null && socket.connected == true){
-	        socket.volatile.json.emit('github', {data: stripedData});
+	        socket.volatile.json.emit('github', {data: stripedData, connectedUsers: allClients.length});
+          // socket.volatile.json.emit('connectedUsers', {data: );
 	    }
 	  });
 
@@ -67,6 +69,7 @@ function stripData(data){
   var pushEventCounter = 0;
   var IssueCommentEventCounter = 0;
   var IssuesEventCounter = 0;
+  var pullRequestEventCounter = 0;
   data.forEach(function(data){
     if(data.type == 'PushEvent'){
       if(pushEventCounter > 3) return;
@@ -82,9 +85,8 @@ function stripData(data){
           'payload_size': data.payload.size,
           'message': data.payload.commits[0].message,
           'created': data.created_at,
-          'url': data.repo.url
+          'url': data.repo.url,
         });
-        pushEventCounter++;
       }
     }else if(data.type == 'IssueCommentEvent'){
       stripedData.push({
@@ -98,7 +100,7 @@ function stripData(data){
         'payload_size': 0,
         'message': data.body,
         'created': data.created_at,
-        'url': data.payload.comment.html_url
+        'url': data.payload.comment.html_url,
       });
     }else if(data.type == 'PullRequestEvent'){
       if (data.payload.pull_request.merged) data.payload.action = 'merged';
@@ -107,13 +109,13 @@ function stripData(data){
         'type': data.type,
         'user': data.actor.display_login,
         'user_avatar': data.actor.avatar_url + 'v=3&s=64',
-          'user_url': data.actor.url,
+        'user_url': data.actor.url,
         'repo_id': data.repo.id,
         'repo_name': data.repo.name,
         'action': data.payload.action,  // opened, reopened, closed, merged
         'message': data.payload.pull_request.title,
         'created': data.created_at,
-        'url': data.payload.pull_request.html_url
+        'url': data.payload.pull_request.html_url,
       });
     }else if(data.type == 'IssuesEvent'){
       stripedData.push({
@@ -127,7 +129,7 @@ function stripData(data){
         'action': data.payload.action,  // opened, reopened, closed
         'message': data.payload.issue.title,
         'created': data.created_at,
-        'url': data.payload.issue.html_url
+        'url': data.payload.issue.html_url,
       });
     }
   });

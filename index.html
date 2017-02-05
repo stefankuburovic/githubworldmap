@@ -64,6 +64,61 @@
                 position: absolute;
                 color: #aaa;
             }
+            .tables {
+                position: absolute;
+                z-index: 50;
+                overflow: auto;
+                height: 400px;
+                width: 200px;
+                font-family: 'Open Sans', sans-serif;
+            }
+            .tables ul {
+                list-style: none;
+                padding-left: 0;
+                float: left;
+                width: 100%;
+                height: auto;
+            }
+            .tables ul li {
+                font-size: 14px;
+                float: left;
+                width: 100%;
+                height: 40px;
+                background: #60845b;    
+                color: #555;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .tables ul li:nth-child(odd){
+                background: #8dbd86;
+            }
+            .country, .counter {
+                float: left;
+                width: 75%;
+                text-align: left;
+                box-sizing: border-box;
+            }
+            li .counter {
+                text-align: right;
+                width: 25%;
+                font-weight: bold;
+            }
+            #push-request.tables {
+                top: 10%;
+                left: 10%;
+            }
+            #pull-request.tables {
+                bottom: 10%;
+                left: 10%;
+            }
+            #issue-event-request.tables {
+                top: 10%;
+                right: 10%;
+            }
+            #issue-comment-event-request.tables {
+                bottom: 10%;
+                right: 10%;
+            }
         </style>
     <!--     <link rel="stylesheet" href="./css/normalize.min.css">
         <link rel="stylesheet" href="./css/main.css"> -->
@@ -73,19 +128,65 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-        <script src="http://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
+        <script src="https://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
         <div class="main-container">
-        <span class='watching'><span class="number"></span> people watching</span>
+            <span class='watching'><span class="number"></span> people watching</span>
             <div class="avatars">
-                
             </div>
             <div id="worldMap">
-                
             </div>
         </div> 
+        <!--<div class="tables" id="push-request">
+            <span class="title">Push Events</span>
+            <div class="table-body">
+                <ul>
+                    <li><span class="total"></span></li>
+                    <li>
+                        <span class="country">Russia</span>
+                        <span class="counter">3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tables" id="pull-request">
+            <span class="title">Pull Request Events</span>
+            <div class="table-body">
+                <ul>
+                    <li><span class="total"></span></li>
+                    <li>
+                        <span class="country">Russia</span>
+                        <span class="counter">3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tables" id="issue-event-request">
+            <span class="title">Issue Events</span>
+            <div class="table-body">
+                <ul>
+                    <li><span class="total"></span></li>
+                    <li>
+                        <span class="country">Russia</span>
+                        <span class="counter">3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tables" id="issue-comment-event-request">
+            <span class="title">Issue Comments Events</span>
+            <div class="table-body">
+                <ul>
+                    <li><span class="total"></span></li>
+                    <li>
+                        <span class="country">Russia</span>
+                        <span class="counter">3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
         <!-- #main-container -->
         <!-- <script src="js/bundle.js"></script> -->
         <script src="/server.js"></script>
@@ -103,7 +204,6 @@
 
             $('.avatars a').hover(function(){
                 var countryData = $(this).attr('data-country');
-                console.log(countryData);
                 $.each(returnCountries(), function(index, country){
                     if(countryData.includes(country.name)) {
                         githubMap.updateChoropleth({
@@ -117,10 +217,14 @@
                 if(typeof data != "undefined") {
                     $.each(data, function(index, value){
                         githubCountries(value);
+                    $('#push-request .total').html(value.pushEventCounter);
+                    $('#pull-request .total').html(value.pullRequestEventCounter);
+                    $('#issue-event-request .total').html(value.IssueEventCounter);
+                    $('#issue-comment-event-request .total').html(value.IssueCommentEventCounter);
                     });
+                    $('.watching .number').html(data.connectedUsers);
                 }
             });
-           
             function githubCountries(data){
                 $.each(data, function(index, value){
                     $.ajax({
@@ -130,7 +234,6 @@
                                 if(result.location != null) {
                                     $.each(returnCountries(), function(index, country){
                                         if(result.location.includes(country.name)) {
-                                            console.log(result.location);
                                             avatars(result, value);
                                             var iso = country.id;
                                             if (value.type == 'PushEvent'){

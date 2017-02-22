@@ -1,10 +1,11 @@
 var request = require('request'),
-app = require('express')(),
+express = require('express')
+app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
 path = require('path');
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
@@ -40,7 +41,7 @@ io.on('connection', function (socket) {
 
 function fetchDataFromGithub(){
   var options = {
-    url: "https://api.github.com/events?access_token=a8f0e48ea5f481c52739bc8a86a463a52299a216",
+    url: "https://api.github.com/events?TOKEN",
     headers: {
       'User-Agent': 'Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36'
     }
@@ -60,9 +61,9 @@ function fetchDataFromGithub(){
 	  console.log("GitHub status code: " + response.statusCode);
 	}
 	});
-	setTimeout(fetchDataFromGithub, 4000);
+	setTimeout(fetchDataFromGithub, 5000);
 }
-setTimeout(fetchDataFromGithub, 4000);
+setTimeout(fetchDataFromGithub, 5000);
 
 function stripData(data){
   var stripedData = [];
@@ -135,3 +136,5 @@ function stripData(data){
   });
   return stripedData;
 }
+
+

@@ -1,35 +1,39 @@
-var githubMap = new Datamap({
+ var githubMap = new Datamap({
 element: document.getElementById("worldMap"),
 projection: 'mercator',
-fills: {
-defaultFill: "#ABDDA4"
-}
+    fills: {
+        defaultFill: "#ABDDA4"
+    }
 }),
 colors = d3.scale.category10(),
 countries = Datamap.prototype.worldTopo.objects.world.geometries;
 var socket = io();
-
-$('.avatars a').hover(function(){
-    var countryData = $(this).attr('data-country');
-    console.log(countryData);
-    $.each(returnCountries(), function(index, country){
-        if(countryData.includes(country.name)) {
-            githubMap.updateChoropleth({
-              [country]: '#000'
-            });
-        }
-    });
+var watchingTranslated = {}, randomTranslate = {};
+$.getJSON('watching.json').done(function(data){
+    watchingTranslated = data;
 });
-
 socket.on('github', function (data) {
     if(typeof data != "undefined") {
         $.each(data, function(index, value){
             githubCountries(value);
+        $('#push-request .total').html(value.pushEventCounter);
+        $('#pull-request .total').html(value.pullRequestEventCounter);
+        $('#issue-event-request .total').html(value.IssueEventCounter);
+        $('#issue-comment-event-request .total').html(value.IssueCommentEventCounter);
         });
+        setTimeout(function(){
+            function pickRandomQuestion(){
+                    var obj_keys = Object.keys(watchingTranslated);
+                    var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                    console.log(ran_key);
+                    randomTranslate = watchingTranslated[ran_key];
+            }
+            pickRandomQuestion();
+            $('.watching').html(data.connectedUsers + ' ' + randomTranslate.string);
+        }, 3000);
     }
 });
-
-function githubCountries(data){
+function githubCountries(data) {
     $.each(data, function(index, value){
         $.ajax({
             url: value.user_url + "?access_token=a8f0e48ea5f481c52739bc8a86a463a52299a216",
@@ -38,7 +42,6 @@ function githubCountries(data){
                     if(result.location != null) {
                         $.each(returnCountries(), function(index, country){
                             if(result.location.includes(country.name)) {
-                                console.log(result.location);
                                 avatars(result, value);
                                 var iso = country.id;
                                 if (value.type == 'PushEvent'){
@@ -80,8 +83,12 @@ function avatars(result, value) {
         appendAvatars(result, value);
     }
 }
-function appendAvatars(result, value, country) {
-    $('.avatars').append('<a href="' + value.url + '" target="_blank" data-country="' + result.location + '"><img src="' + result.avatar_url + '" title="' + result.html_url + ' [' + value.type + ']" class="full-opacity"/></a>');
+function appendAvatars(result, value) {
+    if(!value.type == "PushEvent") {
+        $('.avatars').append('<a href="' + value.url + '" target="_blank" data-country="' + result.location + '" data-api-user="' + result.url + '"><img src="' + result.avatar_url + '" title="' + result.html_url + ' [' + value.type + ']" class="full-opacity"/></a>');
+    } else {
+        $('.avatars').append('<a href="' + result.html_url + '" target="_blank" data-country="' + result.location + '" data-api-user="' + result.url + '"><img src="' + result.avatar_url + '" title="' + result.html_url + ' [' + value.type + ']" class="full-opacity"/></a>');
+    }
     if(value.type != "PushEvent") 
         setTimeout(function(){$('.avatars a img').removeClass('full-opacity')}, 1000);
 

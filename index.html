@@ -6,122 +6,8 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style type="text/css">
-            /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
-            @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-            .main-container, #worldMap {
-                position: relative;
-                display: block;
-                width: 1240px;
-                height: 800px;
-                margin: 50px auto;
-            }
-            .avatars {
-                overflow: hidden;
-                position: absolute;
-                z-index: 100;
-                display: block;
-                bottom: 0;
-                left: 0;
-                box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                padding: 10px;
-            }
-            .avatars img {
-                max-width: 40px;
-                display: inline-block;
-                height: 30px;
-                margin-left: 11px;
-                overflow: hidden;
-                border-radius: 50%;
-                -moz-transition: all 0.3s;
-                -webkit-transition: all 0.3s;
-                transition: all 0.3s;
-            }
-            .avatars img:hover {
-              -moz-transform: scale(1.5);
-              -webkit-transform: scale(1.5);
-              transform: scale(1.5);
-            }
-            .avatars a img {
-                position: relative;
-                -moz-transition: top 0.3s;
-                -webkit-transition: top 0.3s;
-                transition: top 0.3s;
-                top: 0;
-            }
-            .avatars a img.full-opacity {
-                opacity: 1;
-                -moz-transition: top 0.3s;
-                -webkit-transition: top 0.3s;
-                transition: top 0.3s;
-                top: 150px;
-            }
-            .watching {
-                font-family: 'Open Sans', sans-serif;
-                right: 0;
-                position: absolute;
-                color: #aaa;
-            }
-            .tables {
-                position: absolute;
-                z-index: 50;
-                overflow: auto;
-                height: 400px;
-                width: 200px;
-                font-family: 'Open Sans', sans-serif;
-            }
-            .tables ul {
-                list-style: none;
-                padding-left: 0;
-                float: left;
-                width: 100%;
-                height: auto;
-            }
-            .tables ul li {
-                font-size: 14px;
-                float: left;
-                width: 100%;
-                height: 40px;
-                background: #60845b;    
-                color: #555;
-                padding: 10px;
-                box-sizing: border-box;
-            }
-            .tables ul li:nth-child(odd){
-                background: #8dbd86;
-            }
-            .country, .counter {
-                float: left;
-                width: 75%;
-                text-align: left;
-                box-sizing: border-box;
-            }
-            li .counter {
-                text-align: right;
-                width: 25%;
-                font-weight: bold;
-            }
-            #push-request.tables {
-                top: 10%;
-                left: 10%;
-            }
-            #pull-request.tables {
-                bottom: 10%;
-                left: 10%;
-            }
-            #issue-event-request.tables {
-                top: 10%;
-                right: 10%;
-            }
-            #issue-comment-event-request.tables {
-                bottom: 10%;
-                right: 10%;
-            }
-        </style>
-    <!--     <link rel="stylesheet" href="./css/normalize.min.css">
-        <link rel="stylesheet" href="./css/main.css"> -->
+   <!-- <link rel="stylesheet" href="./css/normalize.min.css"> -->
+        <link rel="stylesheet" href="css/main.css"> 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
@@ -133,155 +19,38 @@
     </head>
     <body>
         <div class="main-container">
-            <span class='watching'><span class="number"></span> people watching</span>
+            <span class='watching'><span class="number"></span> people watching in different languages :)</span>
             <div class="avatars">
             </div>
             <div id="worldMap">
             </div>
-        </div> 
-        <!--<div class="tables" id="push-request">
-            <span class="title">Push Events</span>
-            <div class="table-body">
-                <ul>
-                    <li><span class="total"></span></li>
-                    <li>
-                        <span class="country">Russia</span>
-                        <span class="counter">3</span>
-                    </li>
-                </ul>
-            </div>
         </div>
-        <div class="tables" id="pull-request">
-            <span class="title">Pull Request Events</span>
-            <div class="table-body">
+       <!--  <div class="githuber-info" style="opacity: 0;">
+            <div class="header">
+                <img src="">
+                <h2></h2>
+            </div>
+            <div class="body">
                 <ul>
-                    <li><span class="total"></span></li>
                     <li>
-                        <span class="country">Russia</span>
-                        <span class="counter">3</span>
+                        <span>Location:</span>
+                        <span class="location"></span>
+                    </li>
+                    <li>
+                        <span>Pub Repos:</span>
+                        <span class="repos"></span>
+                    </li>
+                    <li>
+                        <span>Company:</span>
+                        <span class="company"></span>
+                    </li>
+                    <li>
+                        <span>Email:</span>
+                        <span class="email"></span>
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="tables" id="issue-event-request">
-            <span class="title">Issue Events</span>
-            <div class="table-body">
-                <ul>
-                    <li><span class="total"></span></li>
-                    <li>
-                        <span class="country">Russia</span>
-                        <span class="counter">3</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="tables" id="issue-comment-event-request">
-            <span class="title">Issue Comments Events</span>
-            <div class="table-body">
-                <ul>
-                    <li><span class="total"></span></li>
-                    <li>
-                        <span class="country">Russia</span>
-                        <span class="counter">3</span>
-                    </li>
-                </ul>
-            </div>
-        </div>-->
-        <!-- #main-container -->
-        <!-- <script src="js/bundle.js"></script> -->
-        <script src="/server.js"></script>
-        <script type="text/javascript">
-            var githubMap = new Datamap({
-            element: document.getElementById("worldMap"),
-            projection: 'mercator',
-            fills: {
-            defaultFill: "#ABDDA4"
-            }
-            }),
-            colors = d3.scale.category10(),
-            countries = Datamap.prototype.worldTopo.objects.world.geometries;
-            var socket = io();
-
-            $('.avatars a').hover(function(){
-                var countryData = $(this).attr('data-country');
-                $.each(returnCountries(), function(index, country){
-                    if(countryData.includes(country.name)) {
-                        githubMap.updateChoropleth({
-                          [country]: '#000'
-                        });
-                    }
-                });
-            });
-
-            socket.on('github', function (data) {
-                if(typeof data != "undefined") {
-                    $.each(data, function(index, value){
-                        githubCountries(value);
-                    $('#push-request .total').html(value.pushEventCounter);
-                    $('#pull-request .total').html(value.pullRequestEventCounter);
-                    $('#issue-event-request .total').html(value.IssueEventCounter);
-                    $('#issue-comment-event-request .total').html(value.IssueCommentEventCounter);
-                    });
-                    $('.watching .number').html(data.connectedUsers);
-                }
-            });
-            function githubCountries(data){
-                $.each(data, function(index, value){
-                    $.ajax({
-                        url: value.user_url + "?access_token=a8f0e48ea5f481c52739bc8a86a463a52299a216",
-                        crossDomain: true,
-                        success: function(result) {
-                                if(result.location != null) {
-                                    $.each(returnCountries(), function(index, country){
-                                        if(result.location.includes(country.name)) {
-                                            avatars(result, value);
-                                            var iso = country.id;
-                                            if (value.type == 'PushEvent'){
-                                                githubMap.updateChoropleth({
-                                                  [iso]: '#17becf'
-                                                });
-                                            } else if (value.type == 'IssueCommentEvent'){
-                                                githubMap.updateChoropleth({
-                                                  [iso]: '#e25758'
-                                                });
-                                            } else if (value.type == 'PullRequestEvent'){
-                                                githubMap.updateChoropleth({
-                                                  [iso]: '#1f77b4'
-                                                });
-                                            } else if (value.type == 'IssuesEvent'){
-                                                githubMap.updateChoropleth({
-                                                  [iso]: '#d62728'
-                                                });
-                                            }
-                                        }
-                                    }); 
-                                }                     
-                            }
-                    });
-                });
-            }
-            function returnCountries(countires) {
-                var countriesRepacked = [];
-                $.each(countries, function(index, value){
-                    countriesRepacked.push({id: value.id, name: value.properties.name});
-                });
-                return countriesRepacked;
-            }
-            function avatars(result, value) {
-                if($('.avatars img').length >= 29) {
-                    $('.avatars a').remove();
-                    appendAvatars(result, value);
-                } else {
-                    appendAvatars(result, value);
-                }
-            }
-            function appendAvatars(result, value, country) {
-                $('.avatars').append('<a href="' + value.url + '" target="_blank" data-country="' + result.location + '"><img src="' + result.avatar_url + '" title="' + result.html_url + ' [' + value.type + ']" class="full-opacity"/></a>');
-                if(value.type != "PushEvent") 
-                    setTimeout(function(){$('.avatars a img').removeClass('full-opacity')}, 1000);
-
-            }
-        </script>
-        <!-- <script src="/js/main.js"></script> -->
+        </div>  -->
+        <script src="js/main.js"></script>
     </body>
 </html>

@@ -1,5 +1,7 @@
 # GithubWorldMap
 
-Experimental project that update map in real time after github event happened 
+http://githubworldmap.com/
+
+Experimental project that update map in real time after github event appear
 
 Inspired by http://github.audio

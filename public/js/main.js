@@ -25,7 +25,6 @@ socket.on('github', function (data) {
             function pickRandomQuestion(){
                     var obj_keys = Object.keys(watchingTranslated);
                     var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-                    console.log(ran_key);
                     randomTranslate = watchingTranslated[ran_key];
             }
             pickRandomQuestion();
@@ -36,7 +35,7 @@ socket.on('github', function (data) {
 function githubCountries(data) {
     $.each(data, function(index, value){
         $.ajax({
-            url: value.user_url + "?access_token=a8f0e48ea5f481c52739bc8a86a463a52299a216",
+            url: value.user_url + "?access_token=token",
             crossDomain: true,
             success: function(result) {
                     if(result.location != null) {
@@ -59,6 +58,26 @@ function githubCountries(data) {
                                 } else if (value.type == 'IssuesEvent'){
                                     githubMap.updateChoropleth({
                                       [iso]: '#d62728'
+                                    });
+                                } else if (value.type == 'ForkEvent'){
+                                    githubMap.updateChoropleth({
+                                      [iso]: '#cfcfcf'
+                                    });
+                                } else if (value.type == 'DeleteEvent'){
+                                    githubMap.updateChoropleth({
+                                      [iso]: '#800000'
+                                    });
+                                } else if (value.type == 'CreateEvent'){
+                                    githubMap.updateChoropleth({
+                                      [iso]: '#d4a74b'
+                                    });
+                                } else if (value.type == 'PullRequestEvent'){
+                                    githubMap.updateChoropleth({
+                                      [iso]: '#768266'
+                                    });
+                                } else if (value.type == 'PullRequestReviewCommentEvent') {
+                                    githubMap.updateChoropleth({
+                                      [iso]: '#a72971'
                                     });
                                 }
                             }
